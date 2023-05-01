@@ -54,7 +54,7 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 extern USBD_HandleTypeDef hUsbDeviceFS;
 char uart_buff[100];
-uint8_t HID_Buffer[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+uint8_t HID_Buffer[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -67,6 +67,8 @@ void MX_USB_HOST_Process(void);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 void type_hello_world(void);
 void type_command(char *command);
+void emoji(char key);
+void send_key(uint8_t modifier, uint8_t key);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -145,8 +147,7 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
 		}
 		else
 			rgui = 0;
-
-		if ((lctrl == 1 || rctrl == 1) && (lalt == 1 || ralt == 1) && ((key == 'h' || key == 'H') || (key == 'c' || key == 'C')))
+		if ((lctrl == 1 || rctrl == 1) && (lalt == 1 || ralt == 1) && ((key == 'h' || key == 'H') || (key == 'c' || key == 'C') || (key == 'q' || key == 'Q')))
 		{
 			if (key == 'h' || key == 'H')
 				type_hello_world();
@@ -154,6 +155,10 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
 			{
 				// char *command = "echo \"Hello World in command line!\"";
 				// type_command(&command, 36);
+			}
+			else if ((key == 'q' || key == 'Q')){
+				emoji(key);
+
 			}
 		}
 		else
@@ -164,19 +169,83 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
 			HID_Buffer[3] = Keyboard_Info->keys[3];
 			HID_Buffer[4] = Keyboard_Info->keys[4];
 			HID_Buffer[5] = Keyboard_Info->keys[5];
-			USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+			USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 		}
 	}
 }
+void send_key(uint8_t modifier, uint8_t key)
+{
+    HID_report[0] = modifier;
+    HID_report[2] = key;
+    USBD_HID_SendReport(&hUsbDevice, HID_report, 8);
+    HAL_Delay(100);
 
-// void type_command(char *command, int len)
-// {
+    // Release all keys
+    HID_report[0] = 0x00;
+    HID_report[2] = 0x00;
+    USBD_HID_SendReport(&hUsbDevice, HID_report, 8);
+    HAL_Delay(100);
+}
+
+void emoji(char key){
+//	uint8_t HID_Buffer[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+	HID_Buffer[0] = 0x08;
+	HID_Buffer[2]= 0x37;
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+	HAL_Delay(100);
+
+	HID_Buffer[0] = 0x00;
+	HID_Buffer[2] = 0x00;
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+
+	if (key == 'q'){
+		HID_Buffer[0] = 0x00; // Left Windows key modifier
+		HID_Buffer[2] = 0x37;
+		USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+		HID_Buffer[0] = 0x00; // Left Windows key modifier
+		HID_Buffer[2] = 0x37;
+		USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+		HID_Buffer[0] = 0x00; // Left Windows key modifier
+		HID_Buffer[2] = 0x37;
+		USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+		HID_Buffer[0] = 0x00; // Left Windows key modifier
+		HID_Buffer[2] = 0x37;
+		USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+		HID_Buffer[0] = 0x00; // Left Windows key modifier
+		HID_Buffer[2] = 0x37;
+		USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+		HID_Buffer[0] = 0x00; // Left Windows key modifier
+		HID_Buffer[2] = 0x37;
+		USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+		HID_Buffer[0] = 0x00; // Left Windows key modifier
+		HID_Buffer[2] = 0x37;
+		USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+		HID_Buffer[0] = 0x00; // Left Windows key modifier
+		HID_Buffer[2] = 0x37;
+		USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+		HID_Buffer[0] = 0x00; // Left Windows key modifier
+		HID_Buffer[2] = 0x37;
+		USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+		HID_Buffer[0] = 0x00; // Left Windows key modifier
+		HID_Buffer[2] = 0x37;
+		USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+		HID_Buffer[0] = 0x00; // Left Windows key modifier
+		HID_Buffer[2] = 0x37;
+		USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+		HID_Buffer[0] = 0x00; // Left Windows key modifier
+		HID_Buffer[2] = 0x37;
+		USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+
+	}
+}
+
+//void type_command(char *command, int len){
 // 	for (int i = 0; i < len; i++)
-// 	{
-// 		uint8_t keys = get_keys(command);
-// 		USBD_HID_SendReport(&hUsbDeviceFS, keys, 6);
-// 	}
-// }
+ //	{
+ 	//	uint8_t keys = get_keys(command);
+ 		//USBD_HID_SendReport(&hUsbDeviceFS, keys, 6);
+ 	//}
+ //}
 
 // uint8_t *get_keys(char *character)
 // {
@@ -191,77 +260,77 @@ void type_hello_world(void)
 {
 	HID_Buffer[0] = 0x02;
 	HID_Buffer[2] = 0x0B; // H
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HID_Buffer[0] = 0x00;
 	HID_Buffer[2] = 0x08; // e
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HID_Buffer[0] = 0x00;
 	HID_Buffer[2] = 0x0F; // l
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HID_Buffer[0] = 0x00;
 	HID_Buffer[2] = 0x00; // Dummy data between ll in Hello
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HID_Buffer[0] = 0x00;
 	HID_Buffer[2] = 0x0F; // l
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HID_Buffer[0] = 0x00;
 	HID_Buffer[2] = 0x12; // o
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HID_Buffer[0] = 0x00;
 	HID_Buffer[2] = 0x2C; // space
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HID_Buffer[0] = 0x02;
 	HID_Buffer[2] = 0x1A; // W
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HID_Buffer[0] = 0x00;
 	HID_Buffer[2] = 0x12; // o
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HID_Buffer[0] = 0x00;
 	HID_Buffer[2] = 0x15; // r
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HID_Buffer[0] = 0x00;
 	HID_Buffer[2] = 0x0F; // l
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HID_Buffer[0] = 0x00;
 	HID_Buffer[2] = 0x07; // d
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HID_Buffer[0] = 0x02;
 	HID_Buffer[2] = 0x1E; // !
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HID_Buffer[0] = 0x00;
 	HID_Buffer[2] = 0x28; // /n
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HID_Buffer[0] = 0x00;
 	HID_Buffer[2] = 0x00; // release all the keys pressed
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 6);
+	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 	HAL_Delay(50);
 
 	HAL_Delay(250);

@@ -83,8 +83,8 @@ all: main-build
 main-build: USB\ HID\ Keyboard\ -\ STM32\ F446RE.elf secondary-outputs
 
 # Tool invocations
-USB\ HID\ Keyboard\ -\ STM32\ F446RE.elf USB\ HID\ Keyboard\ -\ STM32\ F446RE.map: $(OBJS) $(USER_OBJS) /home/senthil/STM32CubeIDE/workspace_1.12.0/USB\ HID\ Keyboard\ -\ STM32\ F446RE/STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "USB HID Keyboard - STM32 F446RE.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/senthil/STM32CubeIDE/workspace_1.12.0/USB HID Keyboard - STM32 F446RE/STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="USB HID Keyboard - STM32 F446RE.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+USB\ HID\ Keyboard\ -\ STM32\ F446RE.elf USB\ HID\ Keyboard\ -\ STM32\ F446RE.map: $(OBJS) $(USER_OBJS) C:\Users\harsh\Downloads\keyboard-shortcuts-bridge-stm32-master\keyboard-shortcuts-bridge-stm32-master\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "USB HID Keyboard - STM32 F446RE.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\harsh\Downloads\keyboard-shortcuts-bridge-stm32-master\keyboard-shortcuts-bridge-stm32-master\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="USB HID Keyboard - STM32 F446RE.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
