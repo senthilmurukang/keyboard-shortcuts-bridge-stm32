@@ -146,7 +146,7 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
 		}
 		else
 			rgui = 0;
-		if ((lctrl == 1 || rctrl == 1) && (lalt == 1 || ralt == 1) && ((key == 'h' || key == 'H') || (key == 'c' || key == 'C') || (key == 'q' || key == 'Q')))
+		if ((lctrl == 1 || rctrl == 1) && (lalt == 1 || ralt == 1) && ((key == 'h' || key == 'H') || (key == 'c' || key == 'C') || (key == 'q' || key == 'Q') ||  (key == 't' || key == 'T')))
 		{
 			if (key == 'h' || key == 'H')
 				type_hello_world();
@@ -159,10 +159,13 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
 			{
 				emoji(key);
 			}
+			else if ((key == 't' || key == 'T'))
+			{
+				emoji(key);
+			}
 		}
 		else
 		{
-			USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
 			send_key(modifier_keys, Keyboard_Info->keys[0]);
 		}
 	}
@@ -172,25 +175,18 @@ void send_key(uint8_t modifier, uint8_t key)
 	HID_Buffer[0] = modifier;
 	HID_Buffer[2] = key;
 	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 8);
-	HAL_Delay(100);
+	HAL_Delay(50);
 
 	// Release all keys
 	HID_Buffer[0] = 0x00;
 	HID_Buffer[2] = 0x00;
 	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 8);
-	HAL_Delay(100);
+	HAL_Delay(50);
 }
 
 void emoji(char key)
 {
-	HID_Buffer[0] = 0x08;
-	HID_Buffer[2] = 0x37;
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(100);
-
-	HID_Buffer[0] = 0x00;
-	HID_Buffer[2] = 0x00;
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
+	send_key(0x08, 0x37);
 
 	if (key == 'q')
 	{
@@ -206,87 +202,39 @@ void emoji(char key)
 		send_key(0x00, 0x11);
 		send_key(0x00, 0x07);
 		send_key(0x00, 0x28);
+		send_key(0x00, 0x29);
 	}
+	else if (key == 't')
+	{
+		send_key(0x00, 0x17);
+		send_key(0x00, 0x0b);
+		send_key(0x00, 0x18);
+		send_key(0x00, 0x10);
+		send_key(0x00, 0x05);
+		send_key(0x00, 0x16);
+		send_key(0x00, 0x2c);
+		send_key(0x00, 0x18);
+		send_key(0x00, 0x13);
+		send_key(0x00, 0x28);
+		send_key(0x00, 0x29);
+	}
+
 }
 
 void type_hello_world(void)
 {
-	HID_Buffer[0] = 0x02;
-	HID_Buffer[2] = 0x0B; // H
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HID_Buffer[0] = 0x00;
-	HID_Buffer[2] = 0x08; // e
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HID_Buffer[0] = 0x00;
-	HID_Buffer[2] = 0x0F; // l
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HID_Buffer[0] = 0x00;
-	HID_Buffer[2] = 0x00; // Dummy data between ll in Hello
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HID_Buffer[0] = 0x00;
-	HID_Buffer[2] = 0x0F; // l
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HID_Buffer[0] = 0x00;
-	HID_Buffer[2] = 0x12; // o
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HID_Buffer[0] = 0x00;
-	HID_Buffer[2] = 0x2C; // space
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HID_Buffer[0] = 0x02;
-	HID_Buffer[2] = 0x1A; // W
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HID_Buffer[0] = 0x00;
-	HID_Buffer[2] = 0x12; // o
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HID_Buffer[0] = 0x00;
-	HID_Buffer[2] = 0x15; // r
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HID_Buffer[0] = 0x00;
-	HID_Buffer[2] = 0x0F; // l
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HID_Buffer[0] = 0x00;
-	HID_Buffer[2] = 0x07; // d
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HID_Buffer[0] = 0x02;
-	HID_Buffer[2] = 0x1E; // !
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HID_Buffer[0] = 0x00;
-	HID_Buffer[2] = 0x28; // /n
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HID_Buffer[0] = 0x00;
-	HID_Buffer[2] = 0x00; // release all the keys pressed
-	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, sizeof(HID_Buffer));
-	HAL_Delay(50);
-
-	HAL_Delay(250);
+	send_key(0x00, 0x0B);
+	send_key(0x00, 0x08);
+	send_key(0x00, 0x0f);
+	send_key(0x00, 0x0f);
+	send_key(0x00, 0x12);
+	send_key(0x00, 0x2c);
+	send_key(0x00, 0x1a);
+	send_key(0x00, 0x12);
+	send_key(0x00, 0x15);
+	send_key(0x00, 0x0f);
+	send_key(0x00, 0x07);
+	send_key(0x00, 0x28);
 }
 /* USER CODE END 0 */
 
