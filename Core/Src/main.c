@@ -81,7 +81,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
 {
-	if (USBH_HID_GetDeviceType(phost) == HID_KEYBOARD) // if the HID is Mouse
+	if (USBH_HID_GetDeviceType(phost) == HID_KEYBOARD) // if the HID is Keyboard
 	{
 		HID_KEYBD_Info_TypeDef *Keyboard_Info = USBH_HID_GetKeybdInfo(phost); // get the info
 		uint8_t key = USBH_HID_GetASCIICode(Keyboard_Info);					  // get the key pressed
@@ -175,13 +175,13 @@ void send_key(uint8_t modifier, uint8_t key)
 	HID_Buffer[0] = modifier;
 	HID_Buffer[2] = key;
 	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 8);
-	HAL_Delay(50);
+	HAL_Delay(100);
 
 	// Release all keys
 	HID_Buffer[0] = 0x00;
 	HID_Buffer[2] = 0x00;
 	USBD_HID_SendReport(&hUsbDeviceFS, HID_Buffer, 8);
-	HAL_Delay(50);
+	HAL_Delay(100);
 }
 
 void emoji(char key)
@@ -201,7 +201,9 @@ void emoji(char key)
 		send_key(0x00, 0x04);
 		send_key(0x00, 0x11);
 		send_key(0x00, 0x07);
+		HAL_Delay(100);
 		send_key(0x00, 0x28);
+		HAL_Delay(100);
 		send_key(0x00, 0x29);
 	}
 	else if (key == 't')
@@ -215,7 +217,9 @@ void emoji(char key)
 		send_key(0x00, 0x2c);
 		send_key(0x00, 0x18);
 		send_key(0x00, 0x13);
+		HAL_Delay(50);
 		send_key(0x00, 0x28);
+		HAL_Delay(50);
 		send_key(0x00, 0x29);
 	}
 
